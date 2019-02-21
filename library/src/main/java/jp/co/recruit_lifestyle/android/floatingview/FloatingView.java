@@ -61,11 +61,6 @@ import java.lang.ref.WeakReference;
 class FloatingView extends FrameLayout implements ViewTreeObserver.OnPreDrawListener {
 
     /**
-     * 押下時の拡大率
-     */
-    private static final float SCALE_PRESSED = 0.9f;
-
-    /**
      * 通常時の拡大率
      */
     private static final float SCALE_NORMAL = 1.0f;
@@ -227,6 +222,11 @@ class FloatingView extends FrameLayout implements ViewTreeObserver.OnPreDrawList
      * 押下処理を通過しているかチェックするための時間
      */
     private long mTouchDownTime;
+
+    /**
+     * 押下時の拡大率
+     */
+    private static float mScalePressed = 0.9f;
 
     /**
      * スクリーン押下X座標(移動量判定用)
@@ -813,7 +813,7 @@ class FloatingView extends FrameLayout implements ViewTreeObserver.OnPreDrawList
             mLocalTouchX = event.getX();
             mLocalTouchY = event.getY();
             mIsMoveAccept = false;
-            setScale(SCALE_PRESSED);
+            setScale(mScalePressed);
 
             if (mVelocityTracker == null) {
                 // Retrieve a new VelocityTracker object to watch the velocity of a motion.
@@ -1357,6 +1357,15 @@ class FloatingView extends FrameLayout implements ViewTreeObserver.OnPreDrawList
      */
     void setShape(float shape) {
         mShape = shape;
+    }
+
+    /**
+     * Sets the scale factor when pressing on the
+     * floating widget. Default is 0.9
+     * @param scalePressed new scale factor.
+     */
+    void setScalePressed(float scalePressed) {
+        mScalePressed = scalePressed;
     }
 
     /**

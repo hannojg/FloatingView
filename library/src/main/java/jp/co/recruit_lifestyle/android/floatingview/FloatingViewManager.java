@@ -516,6 +516,7 @@ public class FloatingViewManager implements ScreenChangedListener, View.OnTouchL
         final boolean isFirstAttach = mFloatingViewList.isEmpty();
         // FloatingView
         final FloatingView floatingView = new FloatingView(mContext);
+        floatingView.setScalePressed(options.scalePressed);
         floatingView.setInitCoords(options.floatingViewX, options.floatingViewY);
         floatingView.setOnTouchListener(this);
         floatingView.setShape(options.shape);
@@ -678,6 +679,11 @@ public class FloatingViewManager implements ScreenChangedListener, View.OnTouchL
         public boolean animateInitialMove;
 
         /**
+         * The scaling factor when holding the floating view
+         */
+        public float scalePressed;
+
+        /**
          * オプションのデフォルト値を設定します。
          */
         public Options() {
@@ -690,6 +696,7 @@ public class FloatingViewManager implements ScreenChangedListener, View.OnTouchL
             moveDirection = MOVE_DIRECTION_DEFAULT;
             usePhysics = true;
             animateInitialMove = true;
+            scalePressed = 0.9f;
         }
 
     }
