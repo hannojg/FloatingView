@@ -896,6 +896,10 @@ class FloatingView extends FrameLayout implements ViewTreeObserver.OnPreDrawList
             }
         }
 
+        // Without this no click events from FloatingView
+        // would be propagated to its child views.
+        super.dispatchTouchEvent(event);
+
         // タッチリスナを通知
         if (mOnTouchListener != null) {
             mOnTouchListener.onTouch(this, event);

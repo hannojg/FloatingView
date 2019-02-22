@@ -28,12 +28,14 @@ import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.DisplayCutout;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -349,6 +351,8 @@ public class FloatingViewManager implements ScreenChangedListener, View.OnTouchL
         if (action == MotionEvent.ACTION_DOWN) {
             // 処理なし
             mIsMoveAccept = true;
+
+            Log.d(FloatingViewManager.class.getSimpleName(), "ACTION DOWN: Floating Manager");
         }
         // 移動
         else if (action == MotionEvent.ACTION_MOVE) {
@@ -384,6 +388,8 @@ public class FloatingViewManager implements ScreenChangedListener, View.OnTouchL
 
             // Touch finish callback
             if (mFloatingViewListener != null) {
+                ((FloatingView) v).getChildAt(0).dispatchTouchEvent(event);
+
                 final boolean isFinishing = mTargetFloatingView.getState() == FloatingView.STATE_FINISHING;
                 final WindowManager.LayoutParams params = mTargetFloatingView.getWindowLayoutParams();
                 mFloatingViewListener.onTouchFinished(isFinishing, params.x, params.y);
@@ -540,7 +546,9 @@ public class FloatingViewManager implements ScreenChangedListener, View.OnTouchL
         mTrashView.setTrashViewListener(this);
 
         // Viewの貼り付け
-        mWindowManager.addView(floatingView, floatingView.getWindowLayoutParams());
+        mWindowManager.addView(floatingView, floatingView.getWindowLayoutParams()); // adding "view" directly to it, does work in terms of touch
+
+
         // 最初の貼り付け時の場合のみ、フルスクリーン監視Viewと削除Viewを貼り付け
         if (isFirstAttach) {
             mWindowManager.addView(mFullscreenObserverView, mFullscreenObserverView.getWindowLayoutParams());
